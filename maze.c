@@ -8,7 +8,7 @@
 
 enum{UP = 65, DOWN, RIGHT, LEFT};
 
-int getch(void){
+int getch(void){//getch구현 입력받기
 	int ch;
 	struct termios buf;
 	struct termios save;
@@ -82,7 +82,7 @@ int map[5][MAP_HEIGHT][MAP_WIDTH]={
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}}
 };//스테이지5 끝
 
-void draw_map(int now){
+void draw_map(int now){//상태표시와 맵그리기
 	int i,j;
 	printf("stage : %d		score : %d\n",now+1, score);
 	for(i=0; i<MAP_HEIGHT; i++){
@@ -99,7 +99,7 @@ void draw_map(int now){
 	}
 }
 
-void move_character(int dire, int *cp_x, int *cp_y, int now){
+void move_character(int dire, int *cp_x, int *cp_y, int now){//캐릭터 이동과 도착, 코인획득 확인
 	switch(dire){
 		case UP:
 			if( map[now][*cp_y-1][*cp_x] == 5){
@@ -156,11 +156,11 @@ void move_character(int dire, int *cp_x, int *cp_y, int now){
 	}
 }
 
-void clear(){
+void clear(){//화면청소
 	system("clear");
 }
 
-void find_character(int *cp_x, int *cp_y, int now){
+void find_character(int *cp_x, int *cp_y, int now){//캐릭터 위치 찾기(스테이지 시작전 사용)
 	int i,j;
 	for(i=0; i<MAP_HEIGHT; i++){
 		for(j=0; j<MAP_WIDTH; j++){
@@ -182,14 +182,16 @@ int main(){
 	char key;
 	clear();
 	draw_map(now_map);
-	while( (key = getch()) != '\n' ){
+
+	while( (key = getch()) != '\n' ){//루프 시작
 		clear();
 		move_character(key, &cha_x, &cha_y, now_map);
-		if(end==1){
+		if(end==1){//도착
 			end=0;
-			now_map+=1;
-			if(now_map == 5){
-				printf("clear\nclear\nclear\n");
+			now_map+=1;//다음스테이지
+			if(now_map == 5){// 마지막 맵 클리어
+				printf("Your score is %d\n",score);
+				printf("Clear\nClear\nClear\n");
 				exit(0);
 			}
 			find_character( &cha_x, &cha_y, now_map);
